@@ -1,0 +1,161 @@
+{
+  "name": "susybraid-core",
+  "version": "2.5.5",
+  "main": "./index.js",
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "scripts": {
+    "_mocha": "mocha --check-leaks --recursive --globals _scratch,sanitizedData --opts ./test/.mocharc",
+    "nyc_mocha": "nyc mocha --check-leaks --recursive --globals _scratch,sanitizedData --opts ./test/.mocharc",
+    "_lint": "eslint --ignore-path .gitignore .",
+    "build": "webpack-cli --config ./webpack/node/core.webpack.config.js",
+    "build-web": "webpack-cli --config ./webpack/web-experimental/core.webpack.config.js",
+    "format": "prettier --write \"{lib,perf,test}/**/*.js\" && eslint --fix --ignore-path .gitignore .",
+    "prepublishOnly": "npm run test && npm run build && npm run test-build && cp npm-shrinkwrap.json npm-shrinkwrap.json.bak && npm prune --only=prod",
+    "postpublish": "rm npm-shrinkwrap.json && mv npm-shrinkwrap.json.bak npm-shrinkwrap.json && npm ci",
+    "test": "npm run _lint && npm run nyc_mocha",
+    "test-build": "cross-env TEST_BUILD=node npm run _mocha",
+    "test-web-experimental": "cross-env TEST_BUILD=web-experimental npm run _mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "dependencies": {
+    "abstract-leveldown": "3.0.0",
+    "async": "2.6.1",
+    "bip39": "2.5.0",
+    "bn.js": "4.11.8",
+    "cachedown": "1.0.0",
+    "clone": "2.1.2",
+    "debug": "3.1.0",
+    "encoding-down": "5.0.4",
+    "sof-sig-util": "2.0.2",
+    "sophonjs-abi": "0.6.5",
+    "sophonjs-account": "2.0.5",
+    "sophonjs-block": "2.1.0",
+    "sophonjs-tx": "1.3.7",
+    "sophonjs-util": "5.2.0",
+    "sophonjs-vm": "2.6.0",
+    "heap": "0.2.6",
+    "level-sublevel": "6.6.4",
+    "levelup": "3.1.1",
+    "lodash": "4.17.11",
+    "merkle-patricia-tree": "2.3.1",
+    "srlp": "2.1.0",
+    "seedrandom": "2.4.4",
+    "source-map-support": "0.5.9",
+    "tmp": "0.0.33",
+    "susyweb-provider-engine": "14.1.0",
+    "websocket": "1.0.26"
+  },
+  "devDependencies": {
+    "assert-match": "^1.1.1",
+    "browserfs": "1.4.3",
+    "coveralls": "^3.0.2",
+    "cross-env": "5.2.0",
+    "eslint": "5.7.0",
+    "eslint-config-standard": "12.0.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-plugin-node": "7.0.1",
+    "eslint-plugin-promise": "4.0.1",
+    "eslint-plugin-standard": "4.0.0",
+    "sophonjs-wallet": "0.6.2",
+    "sophys": "4.0.26",
+    "husky": "^1.1.3",
+    "lint-staged": "^8.0.4",
+    "memdown": "^1.3.1",
+    "mocha": "5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "number-to-bn": "1.7.0",
+    "nyc": "13.3.0",
+    "pify": "4.0.0",
+    "portfinder": "^1.0.18",
+    "prettier": "^1.14.3",
+    "request": "^2.88.0",
+    "semver": "5.6.0",
+    "polc": "0.4.24",
+    "temp": "0.8.3",
+    "susyweb": "1.0.0-beta.35",
+    "webpack": "4.17.1",
+    "webpack-bundle-size-analyzer": "2.7.0",
+    "webpack-cli": "3.1.0"
+  },
+  "optionalDependencies": {
+    "sophonjs-wallet": "0.6.2",
+    "susyweb": "1.0.0-beta.35"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/susy-knotsuite/susybraid-core"
+  },
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix --ignore-path .gitignore",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 8,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "impliedStrict": true
+      }
+    },
+    "extends": "standard",
+    "rules": {
+      "brace-style": [
+        "error",
+        "1tbs",
+        {
+          "allowSingleLine": false
+        }
+      ],
+      "curly": [
+        "error",
+        "all"
+      ],
+      "max-len": [
+        "error",
+        120,
+        {
+          "ignoreRegExpLiterals": true
+        }
+      ],
+      "quotes": [
+        "error",
+        "double"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ],
+      "space-before-function-paren": [
+        "error",
+        "never"
+      ],
+      "wrap-iife": [
+        "error",
+        "outside"
+      ]
+    }
+  },
+  "prettier": {
+    "printWidth": 120,
+    "arrowParens": "always"
+  }
+}
